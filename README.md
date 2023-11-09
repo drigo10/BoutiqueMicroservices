@@ -76,8 +76,6 @@ kubectl edit service frontend-external
 
 Add your IP to frontend-external Service yaml
 ```console
-  - IPv4
-  ipFamilyPolicy: SingleStack
   loadBalancerSourceRanges:
   - 255.255.255.255/32
   ```
