@@ -30,6 +30,12 @@ spec:
     metadata:
       labels:
         app: emailservice
+        tags.datadoghq.com/env: gke-auto-dev
+        tags.datadoghq.com/service: emailservice-gke
+        tags.datadoghq.com/version: gke1.0v
+        admission.datadoghq.com/enabled: "true"
+      annotations:
+        admission.datadoghq.com/python-lib.version: v1.20.4
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -46,11 +52,13 @@ spec:
             drop:
               - ALL
           privileged: false
-          readOnlyRootFilesystem: true
+          readOnlyRootFilesystem: false
         image: gcr.io/google-samples/microservices-demo/emailservice:v0.6.0
         ports:
         - containerPort: 8080
         env:
+        - name: DD_LOGS_INJECTION
+          value: "true"
         - name: PORT
           value: "8080"
         - name: DISABLE_PROFILER
@@ -169,6 +177,12 @@ spec:
     metadata:
       labels:
         app: recommendationservice
+        tags.datadoghq.com/env: gke-auto-dev
+        tags.datadoghq.com/service: recommendationservice-gke
+        tags.datadoghq.com/version: gke1.0v
+        admission.datadoghq.com/enabled: "true"
+      annotations:
+        admission.datadoghq.com/python-lib.version: v1.20.4
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -185,7 +199,7 @@ spec:
             drop:
               - ALL
           privileged: false
-          readOnlyRootFilesystem: true
+          readOnlyRootFilesystem: false
         image: gcr.io/google-samples/microservices-demo/recommendationservice:v0.6.0
         ports:
         - containerPort: 8080
@@ -198,6 +212,8 @@ spec:
           exec:
             command: ["/bin/grpc_health_probe", "-addr=:8080"]
         env:
+        - name: DD_LOGS_INJECTION
+          value: "true"
         - name: PORT
           value: "8080"
         - name: PRODUCT_CATALOG_SERVICE_ADDR
@@ -345,6 +361,12 @@ spec:
     metadata:
       labels:
         app: paymentservice
+        tags.datadoghq.com/env: gke-auto-dev
+        tags.datadoghq.com/service: paymentservice-gke
+        tags.datadoghq.com/version: gke1.0v
+        admission.datadoghq.com/enabled: "true"
+      annotations:
+        admission.datadoghq.com/js-lib.version: v3.39.0
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -361,11 +383,17 @@ spec:
             drop:
               - ALL
           privileged: false
-          readOnlyRootFilesystem: true
+          readOnlyRootFilesystem: false
         image: gcr.io/google-samples/microservices-demo/paymentservice:v0.6.0
         ports:
         - containerPort: 50051
         env:
+        - name: DD_AGENT_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: DD_LOGS_INJECTION
+          value: "true"
         - name: PORT
           value: "50051"
         - name: DISABLE_PROFILER
@@ -473,6 +501,12 @@ spec:
     metadata:
       labels:
         app: cartservice
+        tags.datadoghq.com/env: gke-auto-dev
+        tags.datadoghq.com/service: cartservice-gke
+        tags.datadoghq.com/version: gke1.0v
+        admission.datadoghq.com/enabled: "true"
+      annotations:
+        admission.datadoghq.com/dotnet-lib.version: v2.40.0-musl
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -489,11 +523,13 @@ spec:
             drop:
               - ALL
           privileged: false
-          readOnlyRootFilesystem: true
-        image: gcr.io/google-samples/microservices-demo/cartservice:v0.6.0
+          readOnlyRootFilesystem: false
+        image: docker.io/drigo11/cartservicedotnet7:latest
         ports:
         - containerPort: 7070
         env:
+        - name: DD_LOGS_INJECTION
+          value: "true"
         - name: REDIS_ADDR
           value: "redis-cart:6379"
         resources:
@@ -608,6 +644,12 @@ spec:
     metadata:
       labels:
         app: currencyservice
+        tags.datadoghq.com/env: gke-auto-dev
+        tags.datadoghq.com/service: currencyservice-gke
+        tags.datadoghq.com/version: gke1.0v
+        admission.datadoghq.com/enabled: "true"
+      annotations:
+        admission.datadoghq.com/js-lib.version: v3.39.0
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -630,6 +672,12 @@ spec:
         - name: grpc
           containerPort: 7000
         env:
+        - name: DD_AGENT_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: DD_LOGS_INJECTION
+          value: "true"
         - name: PORT
           value: "7000"
         - name: DISABLE_PROFILER
