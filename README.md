@@ -1,4 +1,3 @@
-
 # Working with Google Kubernetes Engine (Autopilot)
 
 This is a follow along step-by-step guide to:
